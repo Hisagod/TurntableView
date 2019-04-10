@@ -222,7 +222,7 @@ public class TurntableView extends View {
         Log.e("HLP", "旋转角度：" + endAngle);
 
         ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(this, "rotation", animLast, endAngle);
-        objectAnimator.setDuration(second);
+        objectAnimator.setDuration(second*1000);
         objectAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
