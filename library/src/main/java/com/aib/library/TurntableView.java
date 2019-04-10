@@ -1,7 +1,9 @@
 package com.aib.library;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.BitmapFactory;
@@ -18,7 +20,7 @@ import java.util.List;
 
 import androidx.annotation.Nullable;
 
-public class TurntableView extends View implements View.OnClickListener {
+public class TurntableView extends View {
     //默认宽度
     private int defaultWidth = 400;
 
@@ -62,8 +64,9 @@ public class TurntableView extends View implements View.OnClickListener {
     private float textSize;
     //设置文本
     private List<String> texts;
-    //指定转角度数
-    private float angle;
+    //单个扇形的角度
+    private float singleAngle;
+    private float animLast = 0f;
 
     public TurntableView(Context context) {
         this(context, null);
@@ -72,8 +75,6 @@ public class TurntableView extends View implements View.OnClickListener {
 
     public TurntableView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-
-        setOnClickListener(this);
 
         TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs, R.styleable.TurntableView, 0, 0);
         firstColor = typedArray.getColor(R.styleable.TurntableView_firstColor, Color.RED);
@@ -136,6 +137,9 @@ public class TurntableView extends View implements View.OnClickListener {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        //默认指针指向第1个扇形
+        canvas.rotate(roundAngle / sectorNum / 2, mRadius, mRadius);
+
         if (texts == null) {
             throw new NullPointerException("显示数据不能为Null");
         } else {
@@ -146,7 +150,6 @@ public class TurntableView extends View implements View.OnClickListener {
                 if ((i & 1) == 1) {
                     //奇数
                     paint.setColor(firstColor);
-
                 } else {
                     //偶数
                     paint.setColor(secondColor);
@@ -185,50 +188,8 @@ public class TurntableView extends View implements View.OnClickListener {
                         canvas.drawBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_gift), null, imageRectF, null);
                     }
                 }
-
                 startAngle += sweepAngle;
             }
-        }
-    }
-
-    //上次指定角度
-    float lastAngle = 0f;
-
-    @Override
-    public void onClick(final View v) {
-        if (angle == 0F) {
-            throw new NullPointerException("转动角度为Null");
-        } else {
-            //需要转的角度
-            final float endAngle = (roundAngle * 6 + angle);
-
-            ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(v, "rotation", lastAngle, endAngle);
-            objectAnimator.setDuration(5000);
-            objectAnimator.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-                    setClickable(false);
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    lastAngle = endAngle % 360;
-                    int position = (int) (endAngle % 360 / 45);
-                    Log.e("HLP", position + "");
-                    setClickable(true);
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-
-                }
-            });
-            objectAnimator.start();
         }
     }
 
@@ -238,15 +199,47 @@ public class TurntableView extends View implements View.OnClickListener {
      * @param texts
      */
     public void setText(List<String> texts) {
+        //文本数据
         this.texts = texts;
+        //计算多少个扇形
         sectorNum = texts.size();
+        //计算单个扇形角度
+        singleAngle = roundAngle / sectorNum;
         invalidate();
     }
 
-    /**
-     * 制定转到某个位置
-     */
-    public void pointPosition(float angle) {
-        this.angle = angle;
+    public void startPosition(int pos) {
+        Log.e("HLP", "扇形位置：" + pos);
+
+        final float endAngle = roundAngle * 3 + pos * singleAngle;
+        Log.e("HLP", "旋转角度：" + endAngle);
+
+        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(this, "rotation", animLast, endAngle);
+        objectAnimator.setDuration(5000);
+        objectAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                setClickable(false);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                animLast = endAngle % 360;
+                Log.e("HLP", "当前角度：" + animLast);
+
+                setClickable(true);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        objectAnimator.start();
     }
 }

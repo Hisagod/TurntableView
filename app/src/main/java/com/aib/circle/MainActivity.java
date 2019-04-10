@@ -2,7 +2,10 @@ package com.aib.circle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.aib.library.TurntableView;
@@ -24,8 +27,14 @@ public class MainActivity extends AppCompatActivity {
             texts.add(i + "");
         }
 
-        TurntableView tvCircle = findViewById(R.id.tv_circle);
+        final TurntableView tvCircle = findViewById(R.id.tv_circle);
         tvCircle.setText(texts);
-        tvCircle.pointPosition(135/2);
+        tvCircle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int pos = new Random().nextInt(texts.size());
+                tvCircle.startPosition(pos + 1);
+            }
+        });
     }
 }
