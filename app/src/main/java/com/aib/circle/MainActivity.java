@@ -2,13 +2,10 @@ package com.aib.circle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
-import com.aib.library.TurntableView;
+import com.aib.view.TurntableView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int pos = new Random().nextInt(texts.size());
-                tvCircle.startPosition(pos + 1);
+                tvCircle.startPosition(5, 5000, pos + 1);
             }
         });
     }

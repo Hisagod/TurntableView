@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.aib.library.TurntableView
+    <com.aib.view.TurntableView
         android:id="@+id/tv_circle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

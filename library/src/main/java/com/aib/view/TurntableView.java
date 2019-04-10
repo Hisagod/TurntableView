@@ -1,4 +1,4 @@
-package com.aib.library;
+package com.aib.view;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -15,6 +15,8 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+
+import com.aib.library.R;
 
 import java.util.List;
 
@@ -208,14 +210,19 @@ public class TurntableView extends View {
         invalidate();
     }
 
-    public void startPosition(int pos) {
+    /**
+     * @param rotationNum 开始转的时候，转多少圈，再转到固定的位置
+     * @param second      转圈动画执行多长时间
+     * @param pos
+     */
+    public void startPosition(int rotationNum, long second, int pos) {
         Log.e("HLP", "扇形位置：" + pos);
 
-        final float endAngle = roundAngle * 3 + pos * singleAngle;
+        final float endAngle = roundAngle * rotationNum + pos * singleAngle;
         Log.e("HLP", "旋转角度：" + endAngle);
 
         ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(this, "rotation", animLast, endAngle);
-        objectAnimator.setDuration(5000);
+        objectAnimator.setDuration(second);
         objectAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
