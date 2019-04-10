@@ -21,6 +21,7 @@ import com.aib.library.R;
 import java.util.List;
 
 import androidx.annotation.Nullable;
+import listener.AnimationListener;
 
 public class TurntableView extends View {
     //默认宽度
@@ -69,6 +70,8 @@ public class TurntableView extends View {
     //单个扇形的角度
     private float singleAngle;
     private float animLast = 0f;
+    //动画监听器
+    private AnimationListener animationListener;
 
     public TurntableView(Context context) {
         this(context, null);
@@ -222,15 +225,20 @@ public class TurntableView extends View {
         Log.e("HLP", "旋转角度：" + endAngle);
 
         ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(this, "rotation", animLast, endAngle);
-        objectAnimator.setDuration(second*1000);
+        objectAnimator.setDuration(second * 1000);
         objectAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
+                if (animationListener != null)
+                    animationListener.onAnimationStart();
                 setClickable(false);
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
+                if (animationListener != null)
+                    animationListener.onAnimationEnd();
+
                 animLast = endAngle % 360;
                 Log.e("HLP", "当前角度：" + animLast);
 
@@ -248,5 +256,9 @@ public class TurntableView extends View {
             }
         });
         objectAnimator.start();
+    }
+
+    public void addOnAnimationListener(AnimationListener animationListener) {
+        this.animationListener = animationListener;
     }
 }

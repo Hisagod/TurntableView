@@ -1,8 +1,10 @@
 package com.aib.circle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import listener.AnimationListener;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.aib.view.TurntableView;
@@ -30,7 +32,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int pos = new Random().nextInt(texts.size());
-                tvCircle.startPosition(5, 5000, pos + 1);
+                tvCircle.startPosition(5, 5, pos + 1);
+            }
+        });
+
+        tvCircle.addOnAnimationListener(new AnimationListener() {
+            @Override
+            public void onAnimationStart() {
+                Log.e("HLP", "onAnimationStart");
+            }
+
+            @Override
+            public void onAnimationEnd() {
+                Log.e("HLP", "onAnimationEnd");
             }
         });
     }
