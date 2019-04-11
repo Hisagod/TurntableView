@@ -255,6 +255,7 @@ public class TurntableView extends View {
 
             }
         });
+        objectAnimator.setStartDelay(1000);
         objectAnimator.start();
     }
 
