@@ -70,8 +70,6 @@ public class TurntableView extends View {
     //单个扇形的角度
     private float singleAngle;
     private float animLast = 0f;
-    //动画监听器
-    private AnimationListener animationListener;
 
     public TurntableView(Context context) {
         this(context, null);
@@ -218,7 +216,7 @@ public class TurntableView extends View {
      * @param second      转圈动画执行多长时间
      * @param pos
      */
-    public void startPosition(int rotationNum, long second, int pos) {
+    public void startPosition(int rotationNum, long second, int pos, final AnimationListener listener) {
         Log.e("HLP", "扇形位置：" + pos);
 
         final float endAngle = roundAngle * rotationNum + pos * singleAngle;
@@ -229,15 +227,15 @@ public class TurntableView extends View {
         objectAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                if (animationListener != null)
-                    animationListener.onAnimationStart();
+                if (listener != null)
+                    listener.onAnimationStart();
                 setClickable(false);
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if (animationListener != null)
-                    animationListener.onAnimationEnd();
+                if (listener != null)
+                    listener.onAnimationEnd();
 
                 animLast = endAngle % 360;
                 Log.e("HLP", "当前角度：" + animLast);
@@ -257,9 +255,5 @@ public class TurntableView extends View {
         });
         objectAnimator.setStartDelay(1000);
         objectAnimator.start();
-    }
-
-    public void addOnAnimationListener(AnimationListener animationListener) {
-        this.animationListener = animationListener;
     }
 }
