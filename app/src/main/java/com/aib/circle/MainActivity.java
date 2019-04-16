@@ -32,20 +32,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int pos = new Random().nextInt(texts.size());
-                tvCircle.startPosition(5, 5, pos + 1);
+                tvCircle.startPosition(5, 5, pos + 1, new AnimationListener() {
+                    @Override
+                    public void onAnimationStart() {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd() {
+
+                    }
+                });
             }
         });
 
-        tvCircle.addOnAnimationListener(new AnimationListener() {
-            @Override
-            public void onAnimationStart() {
-                Log.e("HLP", "onAnimationStart");
-            }
-
-            @Override
-            public void onAnimationEnd() {
-                Log.e("HLP", "onAnimationEnd");
-            }
-        });
     }
 }

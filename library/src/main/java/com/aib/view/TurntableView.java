@@ -18,6 +18,7 @@ import android.view.View;
 
 import com.aib.library.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.Nullable;
@@ -70,6 +71,8 @@ public class TurntableView extends View {
     //单个扇形的角度
     private float singleAngle;
     private float animLast = 0f;
+    //保存扇形
+    private List<String> arcs = new ArrayList<>();
 
     public TurntableView(Context context) {
         this(context, null);
@@ -141,7 +144,7 @@ public class TurntableView extends View {
         super.onDraw(canvas);
 
         //默认指针指向第1个扇形
-        canvas.rotate(roundAngle / sectorNum / 2, mRadius, mRadius);
+        canvas.rotate(singleAngle * 5 + singleAngle / 2, mRadius, mRadius);
 
         if (texts == null) {
             throw new NullPointerException("显示数据不能为Null");
@@ -221,6 +224,10 @@ public class TurntableView extends View {
 
         final float endAngle = roundAngle * rotationNum + pos * singleAngle;
         Log.e("HLP", "旋转角度：" + endAngle);
+
+//        switch (num) {
+//
+//        }
 
         ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(this, "rotation", animLast, endAngle);
         objectAnimator.setDuration(second * 1000);
