@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="TurntableView">
-        <!--扇形个数-->
-        <attr name="sectorNum" format="integer" />
         <!--第一种颜色-->
         <attr name="firstColor" format="color" />
         <!--第二种颜色-->
         <attr name="secondColor" format="color" />
         <!--文本颜色-->
         <attr name="textColor" format="color" />
-        <!--颜色尺寸-->
+        <!--文本大小-->
         <attr name="textSize" format="dimension" />
-        <!--第几个显示Icon-->
-        <attr name="showGiftIcon" format="integer" />
+        <!--指针图片-->
+        <attr name="pointerIcon" format="reference" />
+        <!--转盘大小-->
+        <attr name="panSize" format="dimension" />
     </declare-styleable>
 </resources>

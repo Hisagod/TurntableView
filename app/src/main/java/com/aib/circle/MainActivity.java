@@ -4,9 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import listener.AnimationListener;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
+import com.aib.adapter.BaseAdapter;
+import com.aib.view.PanView;
 import com.aib.view.TurntableView;
 
 import java.util.ArrayList;
@@ -22,29 +23,30 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 5; i++) {
             texts.add(i + "");
         }
 
-        final TurntableView tvCircle = findViewById(R.id.tv_circle);
-        tvCircle.setText(texts);
-        tvCircle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int pos = new Random().nextInt(texts.size());
-                tvCircle.startPosition(5, 5, pos + 1, new AnimationListener() {
-                    @Override
-                    public void onAnimationStart() {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd() {
-
-                    }
-                });
-            }
-        });
+        TurntableView tvCircle = findViewById(R.id.tv_circle);
+        BaseAdapter adapter = new BaseAdapter(texts);
+        tvCircle.setAdapter(adapter);
+//        tvCircle.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                int pos = new Random().nextInt(texts.size());
+//                tvCircle.startPosition(5, 5, pos + 1, new AnimationListener() {
+//                    @Override
+//                    public void onAnimationStart() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onAnimationEnd() {
+//
+//                    }
+//                });
+//            }
+//        });
 
     }
 }

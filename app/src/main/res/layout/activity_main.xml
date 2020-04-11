@@ -12,12 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         app:firstColor="#D581FF"
-        app:secondColor="#A04BE9"
-        app:textSize="14sp" />
-
-    <ImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_centerInParent="true"
-        android:src="@drawable/ic_pointer" />
+        app:panSize="300dp"
+        app:pointerIcon="@drawable/ic_point"
+        app:secondColor="#A04BE9" />
 </RelativeLayout>
