@@ -1,14 +1,13 @@
 package com.aib.circle;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import listener.AnimationListener;
 
 import android.os.Bundle;
-import android.view.View;
 
 import com.aib.adapter.BaseAdapter;
 import com.aib.view.PanView;
-import com.aib.view.TurntableView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,30 +22,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 10; i++) {
             texts.add(i + "");
         }
 
-        TurntableView tvCircle = findViewById(R.id.tv_circle);
+        PanView pan = findViewById(R.id.pan);
         BaseAdapter adapter = new BaseAdapter(texts);
-        tvCircle.setAdapter(adapter);
-//        tvCircle.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                int pos = new Random().nextInt(texts.size());
-//                tvCircle.startPosition(5, 5, pos + 1, new AnimationListener() {
-//                    @Override
-//                    public void onAnimationStart() {
-//
-//                    }
-//
-//                    @Override
-//                    public void onAnimationEnd() {
-//
-//                    }
-//                });
-//            }
-//        });
+        pan.setAdapter(adapter);
+        pan.startPosition(10, new AnimationListener() {
+            @Override
+            public void onAnimationStart() {
+
+            }
+
+            @Override
+            public void onAnimationEnd() {
+
+            }
+        });
 
     }
 }

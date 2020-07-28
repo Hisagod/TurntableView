@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="TurntableView">
+    <declare-styleable name="PanView">
         <!--第一种颜色-->
         <attr name="firstColor" format="color" />
         <!--第二种颜色-->
@@ -9,8 +9,6 @@
         <attr name="textColor" format="color" />
         <!--文本大小-->
         <attr name="textSize" format="dimension" />
-        <!--指针图片-->
-        <attr name="pointerIcon" format="reference" />
         <!--转盘大小-->
         <attr name="panSize" format="dimension" />
     </declare-styleable>
