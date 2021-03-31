@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         PanView pan = findViewById(R.id.pan);
         BaseAdapter adapter = new BaseAdapter(texts);
         pan.setAdapter(adapter);
-        pan.startPosition(10, new AnimationListener() {
+        pan.startPosition(5, new AnimationListener() {
             @Override
             public void onAnimationStart() {
 

@@ -13,6 +13,7 @@ import android.graphics.RectF;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.aib.adapter.BaseAdapter;
@@ -24,20 +25,15 @@ import listener.AnimationListener;
 
 public class PanView extends View {
     //转盘大小(因为是圆的，当然宽=高)
-    private int panSize;
-
+    private int panSize = 400;
     //开始角度
     private float startAngle = 0;
-
     //扇形划过角度
     private int sweepAngle;
-
     //圆的总度数
     private int roundAngle = 360;
-
     //半径
     private int mRadius;
-
     //画笔
     private Paint paint;
     //第一种颜色
@@ -48,9 +44,6 @@ public class PanView extends View {
     private int textColor;
     //文本大小
     private float textSize;
-    //单个扇形的角度
-    private float singleAngle;
-
     //扇形个数,默认是2个
     private int count = 2;
     //适配器数据
@@ -65,7 +58,6 @@ public class PanView extends View {
 
         TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs, R.styleable.PanView, 0, 0);
         firstColor = typedArray.getColor(R.styleable.PanView_firstColor, Color.RED);
-        panSize = typedArray.getDimensionPixelSize(R.styleable.PanView_panSize, 400);
         secondColor = typedArray.getColor(R.styleable.PanView_secondColor, Color.BLUE);
         textColor = typedArray.getColor(R.styleable.PanView_textColor, Color.WHITE);
         textSize = typedArray.getDimension(R.styleable.PanView_textSize, 25);
@@ -85,17 +77,19 @@ public class PanView extends View {
     }
 
     @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+
+        mRadius = panSize / 2;
+    }
+
+    @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
         if (adapter == null) {
             return;
         }
-        //半径
-        mRadius = panSize / 2;
-
-        //平均每个扇形扫的角度
-        sweepAngle = roundAngle / count;
 
         //默认指针指向第1个扇形
         canvas.rotate(roundAngle - (90 + sweepAngle / 2), mRadius, mRadius);
@@ -132,8 +126,8 @@ public class PanView extends View {
         this.adapter = adapter;
         //计算多少个扇形
         count = adapter.getCount();
-        //计算单个扇形角度
-        singleAngle = roundAngle / count;
+        //平均每个扇形扫的角度
+        sweepAngle = roundAngle / count;
         invalidate();
     }
 
@@ -144,62 +138,31 @@ public class PanView extends View {
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(final View v) {
-//                v.setEnabled(false);
-                //(roundAngle - (pos - 1) * singleAngle)
-
-                final ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, roundAngle);
-                valueAnimator.setRepeatMode(ValueAnimator.RESTART);
-                valueAnimator.setRepeatCount(ValueAnimator.INFINITE);
-                valueAnimator.setInterpolator(null);
-                valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                ObjectAnimator animator = ObjectAnimator.ofFloat(v, "rotation", 0, sweepAngle * pos + roundAngle * 5);
+                animator.setRepeatMode(ValueAnimator.RESTART);
+                animator.setDuration(2000);
+                animator.setInterpolator(null);
+                animator.addListener(new Animator.AnimatorListener() {
                     @Override
-                    public void onAnimationUpdate(ValueAnimator animation) {
-                        float value = (float) animation.getAnimatedValue();
-                        v.setRotation(value);
-                        if (value==360){
-                            animation.end();
-                        }
-                        Log.e("HLP", value + "");
+                    public void onAnimationStart(Animator animator) {
+                        listener.onAnimationStart();
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        listener.onAnimationEnd();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animator) {
                     }
                 });
-                valueAnimator.start();
-
-//                final ObjectAnimator rotationAnimator = ObjectAnimator.ofFloat(v, "rotation", 0, roundAngle);
-//                rotationAnimator.setRepeatMode(ValueAnimator.RESTART);
-//                rotationAnimator.setInterpolator(null);
-//                rotationAnimator.setRepeatCount(ValueAnimator.INFINITE);
-//                rotationAnimator.addListener(new Animator.AnimatorListener() {
-//                    @Override
-//                    public void onAnimationStart(Animator animation) {
-//                        listener.onAnimationStart();
-//                    }
-//
-//                    @Override
-//                    public void onAnimationEnd(Animator animation) {
-//                        listener.onAnimationEnd();
-//                        v.setEnabled(true);
-//                    }
-//
-//                    @Override
-//                    public void onAnimationCancel(Animator animation) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onAnimationRepeat(Animator animation) {
-//
-//                    }
-//                });
-//                rotationAnimator.start();
-//                v.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        rotationAnimator.cancel();
-//                        rotationAnimator.setupStartValues();
-//                        rotationAnimator.setFloatValues(roundAngle - (pos - 1) * singleAngle);
-//                        rotationAnimator.start();
-//                    }
-//                }, 4000);
+                animator.start();
             }
         });
     }

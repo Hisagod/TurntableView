@@ -9,7 +9,5 @@
         <attr name="textColor" format="color" />
         <!--文本大小-->
         <attr name="textSize" format="dimension" />
-        <!--转盘大小-->
-        <attr name="panSize" format="dimension" />
     </declare-styleable>
 </resources>
